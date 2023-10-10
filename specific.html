@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Specific Classification</title>
+</head>
+
+<body>
+  <h1>Specific Classification</h1>
+  <form id="upload-form" enctype="multipart/form-data">
+    <img src="http://localhost:8080/Medical_Imaging_API's/uploads/image-1684005753009-409355316.jpg">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+    <input type="file" name="image" multiple>
+    <button type="submit">Upload Image</button>
+  </form>
+  <script>
+    const form = document.getElementById('upload-form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const fileInput = document.querySelector('input[type="file"]');
+      const formData = new FormData();
+      for (let i = 0; i < fileInput.files.length; i++) {
+        formData.append('image', fileInput.files[i]);
+      }
+      const nameInput = document.getElementById('name');
+      formData.append('name', nameInput.value);
+      fetch('/uploadgen', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+    });
+  </script>
+</body>
+
+</html>
